@@ -1,0 +1,50 @@
+library(raster)##
+library(rgdal)
+library(dismo)##
+library(rjava)
+library(jsonlite)
+library(sp)
+library(maptools)##
+library(ENMeval)##
+
+
+cordinates<-read.table('clipboard')
+
+total <- nrow(cordinates) ## contar
+
+dups <- duplicated (cordinates [,1:2]) ## quitar duplicados
+
+cordinates <- unique(cordinates) ## quitar duplicados
+
+x <- cordinates [,1]  ## area de mapeo
+y <- cordinates [,2]
+
+xmin=min(x)-5
+xmax=max(x)+5
+ymin=min(y)-8
+ymax=max(y)+4
+
+## mapear 
+maps::map("world", xlim=c(xmin,xmax), ylim=c(ymin,ymax),
+          col="gray60", border="gray60", fill=TRUE, resolution=0)
+
+box(which = "plot", lty = "soild", lwd=100)
+axis(side=1,cex.axis=0.4,lwd = 0.25)
+axis(side=2,cex.axis=0.4, lwd = 0.25)
+
+
+## consultar puntos
+data(wrld_simpl)
+specie.pts <- SpatialPoints(cordinates, proj4string = CRS(proj4string(wrld_simpl)))
+min.distance <- c()
+pts.on.land 
+
+box()
+points(specie.pts@coords$long, specie.pts@coords$lat, col="20", pch=20, cex=2)
+--------------------------------------------------------------------------------
+
+list.raster <- (
+  list.file (
+    )
+)
+  

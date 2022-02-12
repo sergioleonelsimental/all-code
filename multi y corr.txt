@@ -1,0 +1,27 @@
+# instalar y cargar el paquete fuzzySim (disponible en R-Forge):
+if (!require(fuzzySim)) install.packages("fuzzySim", repos = "http://R-Forge.R-project.org")
+library(fuzzySim)
+
+names(datos)
+head(datos)
+
+# analizar el "false discovery rate" (significacion corregida) para cada especie:
+?FDR
+names(datos)
+FDR(data = datos, sp.cols = 4, var.cols = 6:ncol(datos))
+FDR(data = datos, sp.cols = 5, var.cols = 6:ncol(datos))
+
+# analizar las correlaciones (multicolinealidad) entre variables y el factor de inflaccion:
+?multicol
+multicol(datos[ , 6:ncol(datos)])  # especificar solo las columnas con variables!
+
+# analizar las correlaciones entre pares de variables:
+?cor
+cor(datos[ , 6:ncol(datos)], use = "pairwise.complete.obs")
+
+# analizar las correlaciones de dos en dos, y combinadas con la significacion sobre la especie:
+?corSelect
+names(datos)
+corSelect(data = datos, var.cols = 6:ncol(datos), cor.thresh = 0.8, use = "pairwise.complete.obs")
+corSelect(data = datos, sp.cols = 4, var.cols = 6:ncol(datos), cor.thresh = 0.8, use = "pairwise.complete.obs")
+corSelect(data = datos, sp.cols = 5, var.cols = 6:ncol(datos), cor.thresh = 0.8, use = "pairwise.complete.obs")

@@ -1,0 +1,38 @@
+library("poppr") 
+library("magrittr")
+library("vcfR")
+
+# 1.- Vamos a leer el archivo vcf que nos interesa en R
+vcf<-read.vcfR("Mexiko_MAC_FIN.recode.vcf")
+
+#convertir VCF a formato genind
+my_genind <- vcfR2genind(vcf)
+
+#Asignamos datos poblacionales al archivo genind
+data <-read.table("51.txt", sep = "\t", header = T)
+pop(my_genind) <- data$pop
+my_genind
+
+#convertimos de formato genind a formato genclone
+my_genclone <- poppr::as.genclone(my_genind)
+my_genclone
+
+#borrar los formatos VCF, data y genind
+rm(vcf)
+rm(data)
+rm(my_genind)
+
+#A continuación, analizaremos las poblaciones mexicanas con el índice de asociación (IA)(Brown, Feldman & Nevo, 1980), 
+#usaremos 999 permutaciones (sample = 999) para darnos un valor p.
+#Agapow and Burt also described the index r¯d
+
+#MX <- popsub(my_genclone, "pops")
+#IA <- ia(MX, sample = 999)
+#write.csv(IA, file="IA.csv")
+
+pair_ia <- pair.ia(my_genclone, sample = 999)
+write.csv(pair_ia, file="pair_ia.csv")
+
+genclone <- as.genclone(vcf.genind)
+genind2genalex( my_genind, filename = "jav.csv",)
+write.csv(my_genind, file="jav.csv")

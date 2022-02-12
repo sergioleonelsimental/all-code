@@ -1,0 +1,28 @@
+#Leer, escribir, manipular, analizar y modelar datos espaciales
+library(raster)
+
+#Enlaces a formatos ráster compatibles
+library(rgdal)
+
+#Manejo de metadatos
+library(ncdf4)
+
+#Quitala coliniaridad
+library(virtualspecies)
+
+#No es nesesario
+library(removeCollinearity) 
+
+#Leer lista de raster
+listaVar  <- list.files(full.name =T)
+
+#Crear lista de raster
+listaVar
+
+#Crear raster stack
+pcp_stk <- stack(listaVar)
+
+#Remover la colinaridad entre variables 
+raster.crop.reduced <- removeCollinearity(pcp_stk, multicollinearity.cutoff = 0.8,
+                                          select.variables = TRUE, sample.points = FALSE, plot = TRUE, method = "spearman")
+

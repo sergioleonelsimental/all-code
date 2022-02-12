@@ -1,0 +1,5 @@
+presvals <- extract(rasters.final,prese[,1:2])
+presvals1<-cbind(prese,presvals)
+## estracion de ausencia
+absvals <- extract(rasters.final, backgr)
+absvals1<-cbind(backgr,absvals)

@@ -1,0 +1,16 @@
+library (coda)
+chain <-read.table("F:/2019/Tesis/climaticas/egelmannii/d100/d100.sel",header = TRUE)
+plot_bayescan("ARIZONICA_fst.txt",FDR=0.05)
+chain <- chain [-c(1)]
+chain <- mcmc(chain,thin=10)
+plot(chain)
+summary(chain)
+autocorr.diag(chain)
+effectiveSize(chain)
+geweke.diag(chain, frac1=0.1, frac2=0.5)
+heidel.diag(chain, eps=0.1, pvalue=0.05)
+combined = mcmc.list(chain1,chain2)
+plot(combined)
+gelman.diag(combined)
+gelman.plot(combined,ask)
+

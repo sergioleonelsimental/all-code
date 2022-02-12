@@ -1,0 +1,13 @@
+##CONVERTIR 012 EN VCFTOOLS (NA=-1)
+vcftools --vcf my.file.vcf --012  --out output_geno.vcf
+
+##NOMBRAR COLUMNAS Y FILAS
+snps<-read.delim('wild_annuus.snps.fb.lenient.noTE_filt_DP15_GOOD_IND_ld.pruned.0.1._replaced_9.geno.table.012',header=F,row.names=1)
+pos<-read.delim('wild_annuus.snps.fb.lenient.noTE_filt_DP15_GOOD_IND_ld.pruned.0.1.geno.table.012.pos',header=F)
+indv<-read.delim('wild_annuus.snps.fb.lenient.noTE_filt_DP15_GOOD_IND_ld.pruned.0.1.geno.table.012.indv',header=F)
+colnames(snps)<-paste(pos[,1],pos[,2],sep=':')
+rownames(snps)<-indv[,1]
+snps<-as.matrix(snps)
+
+###En caso de querer trasponer la matriz
+snps.convert<-t(snps)

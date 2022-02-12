@@ -1,0 +1,68 @@
+https://www.youtube.com/watch?v=6Ds9L4NpRVQ
+
+#Cargar y utilizar función IPAK
+#ver vídeo https://www.youtube.com/watch?v=UjQz9SxG9rk
+
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg)) 
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+# uso
+packages <- c("haven","apa","dplyr","tidyBF","BayesFactor","ggstatsplot")
+ipak(packages)
+
+
+setwd('C:/Users/pable/Desktop/Comparación medias independientes')
+df <- read_sav("t_test_idepen.sav")
+View(df)
+
+#t.test paramétrico
+t.test(df$IIEF~df$group, var.equal=TRUE)
+tobj<-t.test(df$IIEF~df$group, var.equal=TRUE)
+
+t_apa(tobj, es = "cohens_d", format = c("text"), print = TRUE)
+
+#t test no paramétrico
+wilcox.test(IIEF~group, data = df, exact = FALSE)
+
+#asociado al paquete dplyr, sacar médias y DT por grupos.
+group_by(df, group) %>%
+  summarise(
+    count = n(),
+    M = mean(IIEF),
+    SD = sd(IIEF),
+    median = median(IIEF),
+    IQR = IQR(IIEF)
+  )
+
+#t test bayesiano con paquete BayesFactor
+
+ttestBF(formula = IIEF ~ group, data = df)
+
+#t test bayesiano con paquete tidyBF
+bf_ttest(data = df, x = group, y = IIEF)
+
+
+ggstatsplot::ggbetweenstats(
+  data = df,
+  x = group, # Variable de agrupación/independiente
+  y = IIEF, # Variable dependiente
+  xlab = "Grupo", # etiqueta para el eje X
+  ylab = "IIFE", # etiqueta para el eje y
+  type = "p",#eliges el tipo de prueba "p" (for parametric), "np" (for nonparametric), "r" (for robust), "bf" (for Bayes Factor).
+  effsize.type = "g", #el tipo de estimador de efecto además de "d" está "g", "r" y la robusta que viene por defecto si eliges la robusta.
+  conf.level = 0.99,
+  plot.type = "violin", # type of plot también se puede "box" o "violin"
+  outlier.tagging = TRUE, # Te indica cuales son outliers
+  outlier.coef = 1.5, # coeficiente para considerarlo outlier siguiendo la Tukey's rule
+  #outlier.label = IIEF, # La etiqueta que va a tener los outliers
+  outlier.label.args = list(color = "red"), # la etiqueta de los outlairs en rojo
+  messages = FALSE, # apagar los mensajes, ¿qué mensajes?, ni idea. 
+  ggtheme = ggplot2::theme_gray(), # cambiar el fondo de la gráfica todos los temas en https://ggplot2.tidyverse.org/reference/ggtheme.html
+  package = "yarrr", # El paquete asociado a la paleta de colores.
+  palette = "info2", # Elegir la paletta dentro del paquete 
+  title = "Chupito de R",
+  caption = "lo que querais poner"

@@ -1,0 +1,7 @@
+library(dplyr)
+
+j1<-read.table('clipboard')
+
+muestreo1 <- sample_n(j1, size= 5)
+nrow(muestreo1)
+muestreo1
